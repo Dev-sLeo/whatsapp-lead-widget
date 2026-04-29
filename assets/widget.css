@@ -1,0 +1,464 @@
+/* ─── WhatsApp Lead Widget ───────────────────────────────────────────── */
+
+/* Ensure fixed elements are not clipped by theme containers */
+html,
+body {
+  overflow-x: clip !important;
+}
+
+:root {
+  --wlw-green: #25d366;
+  --wlw-green-dark: #1da851;
+  --wlw-green-light: #4de88a;
+  --wlw-bg: #1a2230;
+  --wlw-bg2: #1e2a3b;
+  --wlw-surface: #243044;
+  --wlw-border: rgba(255, 255, 255, 0.08);
+  --wlw-text: #e8edf5;
+  --wlw-muted: #7a8fa6;
+  --wlw-input-bg: #1a2636;
+  --wlw-radius: 18px;
+  --wlw-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(37, 211, 102, 0.12);
+}
+
+/* ─── Floating Button ──────────────────────────────────────────────── */
+
+#wlw-float-btn {
+  position: fixed;
+  bottom: 28px;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#wlw-float-btn.wlw-right {
+  right: 28px;
+  flex-direction: row-reverse;
+}
+#wlw-float-btn.wlw-left {
+  left: 28px;
+  flex-direction: row;
+}
+
+#wlw-float-btn:hover {
+  transform: scale(1.07);
+}
+#wlw-float-btn:active {
+  transform: scale(0.97);
+}
+
+.wlw-fab {
+  width: 60px;
+  height: 60px;
+  background: var(--wlw-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 20px rgba(37, 211, 102, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.wlw-fab svg {
+  width: 32px;
+  height: 32px;
+  fill: #fff !important;
+}
+
+.wlw-fab svg path,
+.wlw-fab svg * {
+  fill: #fff !important;
+}
+
+/* Pulse ring */
+.wlw-fab::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.4);
+  animation: wlw-pulse 2.2s ease-out infinite;
+}
+.wlw-fab::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.2);
+  animation: wlw-pulse 2.2s ease-out 0.5s infinite;
+}
+
+@keyframes wlw-pulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Tooltip */
+.wlw-tooltip {
+  background: #1a2230;
+  color: var(--wlw-text);
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 8px 14px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateX(0) scale(0.9);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+  pointer-events: none;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.wlw-right .wlw-tooltip {
+  margin-right: 12px;
+  transform-origin: right center;
+}
+.wlw-left .wlw-tooltip {
+  margin-left: 12px;
+  transform-origin: left center;
+}
+
+#wlw-float-btn:hover .wlw-tooltip {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─── Popover Modal ────────────────────────────────────────────────── */
+
+#wlw-modal {
+  position: fixed;
+  bottom: 104px; /* above the 60px button + 28px bottom + 16px gap */
+  z-index: 99991;
+  background: var(--wlw-bg);
+  border-radius: var(--wlw-radius);
+  box-shadow: var(--wlw-shadow);
+  width: 340px;
+  border: 1px solid var(--wlw-border);
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px) scale(0.97);
+  transform-origin: bottom right;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#wlw-modal.wlw-right {
+  right: 28px;
+  transform-origin: bottom right;
+}
+#wlw-modal.wlw-left {
+  left: 28px;
+  transform-origin: bottom left;
+}
+
+#wlw-modal.wlw-open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+/* Header */
+.wlw-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid var(--wlw-border);
+  background: var(--wlw-bg2);
+}
+
+.wlw-header-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--wlw-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wlw-header-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: #fff;
+}
+
+.wlw-header-text h3 {
+  margin: 0 0 2px;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--wlw-text);
+  line-height: 1.2;
+}
+
+.wlw-header-text p {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  color: var(--wlw-muted);
+}
+
+.wlw-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--wlw-border);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  color: var(--wlw-muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.wlw-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--wlw-text);
+}
+
+/* Body */
+.wlw-modal-body {
+  padding: 22px;
+}
+
+.wlw-field {
+  margin-bottom: 16px;
+}
+
+.wlw-field label {
+  display: block;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wlw-text);
+  margin-bottom: 7px;
+  letter-spacing: 0.01em;
+}
+
+.wlw-field label span {
+  color: var(--wlw-green-light);
+  margin-left: 2px;
+}
+
+.wlw-field input,
+.wlw-field select {
+  width: 100%;
+  background: var(--wlw-input-bg) !important;
+  border: 1.5px solid var(--wlw-border) !important;
+  border-radius: 10px !important;
+  padding: 13px 16px !important;
+  font-size: 14px !important;
+  color: var(--wlw-text) !important;
+  font-family: -apple-system, "Segoe UI", sans-serif !important;
+  outline: none !important;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+}
+
+.wlw-field select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8fa6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  padding-right: 36px !important;
+  cursor: pointer !important;
+}
+
+.wlw-field select option {
+  background: var(--wlw-input-bg);
+  color: var(--wlw-text);
+}
+
+.wlw-field input::placeholder {
+  color: var(--wlw-muted) !important;
+}
+
+.wlw-field input:focus,
+.wlw-field select:focus {
+  border-color: var(--wlw-green) !important;
+  box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.12) !important;
+}
+
+.wlw-field input.wlw-error,
+.wlw-field select.wlw-error {
+  border-color: #e05252 !important;
+  box-shadow: 0 0 0 3px rgba(224, 82, 82, 0.12) !important;
+}
+
+.wlw-field .wlw-field-error {
+  font-size: 11px;
+  color: #e05252;
+  margin-top: 5px;
+  display: none;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+}
+
+.wlw-field .wlw-field-error.wlw-visible {
+  display: block;
+}
+
+/* Submit button */
+.wlw-submit-btn {
+  width: 100%;
+  background: var(--wlw-green);
+  color: #fff !important;
+  border: none !important;
+  border-radius: 12px !important;
+  padding: 15px 20px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  font-family: -apple-system, "Segoe UI", sans-serif !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  margin-top: 6px !important;
+  transition:
+    background 0.2s,
+    transform 0.15s,
+    box-shadow 0.2s !important;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.3) !important;
+  letter-spacing: 0.01em !important;
+}
+
+.wlw-submit-btn:hover {
+  background: var(--wlw-green-dark) !important;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+  transform: translateY(-1px) !important;
+}
+
+.wlw-submit-btn:active {
+  transform: translateY(0) !important;
+}
+
+.wlw-submit-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+  flex-shrink: 0;
+}
+
+.wlw-submit-btn.wlw-loading {
+  pointer-events: none !important;
+  opacity: 0.75 !important;
+}
+
+/* Global error message */
+#wlw-global-error {
+  background: rgba(224, 82, 82, 0.12);
+  border: 1px solid rgba(224, 82, 82, 0.3);
+  color: #f08080;
+  font-size: 13px;
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  display: none;
+}
+
+#wlw-global-error.wlw-visible {
+  display: block;
+}
+
+/* ─── Spinner ──────────────────────────────────────────────────────── */
+
+/* Honeypot — visually hidden but accessible to bots */
+.wlw-honeypot {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wlw-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: wlw-spin 0.6s linear infinite;
+  display: none;
+}
+
+.wlw-loading .wlw-spinner {
+  display: block;
+}
+.wlw-loading .wlw-btn-text,
+.wlw-loading .wlw-btn-icon {
+  display: none;
+}
+
+@keyframes wlw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Responsive ───────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  #wlw-modal {
+    width: calc(100vw - 32px);
+    border-radius: 16px;
+  }
+  #wlw-modal.wlw-right {
+    right: 16px;
+  }
+  #wlw-modal.wlw-left {
+    left: 16px;
+  }
+  .wlw-modal-header {
+    padding: 18px 18px 14px;
+  }
+  .wlw-modal-body {
+    padding: 18px;
+  }
+  #wlw-float-btn.wlw-right {
+    right: 16px;
+  }
+  #wlw-float-btn.wlw-left {
+    left: 16px;
+  }
+  #wlw-float-btn {
+    bottom: 16px;
+  }
+  #wlw-modal {
+    bottom: 92px;
+  }
+}
