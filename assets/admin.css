@@ -9,7 +9,7 @@
 }
 
 .wlw-badge {
-  background: #25D366;
+  background: #25d366;
   color: #fff;
   font-size: 12px;
   font-weight: 600;
@@ -24,7 +24,7 @@
   border-radius: 8px;
   padding: 20px 24px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
 .wlw-card h2 {
@@ -37,7 +37,7 @@
 }
 
 .wlw-required {
-  color: #25D366;
+  color: #25d366;
   font-weight: 700;
 }
 
@@ -55,7 +55,9 @@
   font-size: 12px;
 }
 
-.wlw-delete-link:hover { text-decoration: underline; }
+.wlw-delete-link:hover {
+  text-decoration: underline;
+}
 
 .wlw-empty {
   background: #f9f9f9;
@@ -74,4 +76,142 @@
 
 .wlw-card .form-table td textarea.large-text {
   min-height: 70px;
+}
+
+/* ── Field Management ──────────────────────────────────────────────── */
+
+#wlw-fields-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wlw-field-row {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.wlw-field-row:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.wlw-field-row-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f0f0f0;
+  border-bottom: 1px solid #ddd;
+}
+
+.wlw-drag-handle {
+  color: #aaa;
+  cursor: grab;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.wlw-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wlw-system-badge {
+  background: #e8f5e9;
+  color: #2e7d32;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid #c8e6c9;
+}
+
+.wlw-row-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.wlw-field-row-body {
+  padding: 14px;
+}
+
+.wlw-field-grid {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.wlw-field-grid label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.wlw-field-grid input.regular-text,
+.wlw-field-grid select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wlw-required-wrap {
+  padding-bottom: 2px;
+}
+
+.wlw-required-wrap label {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-bottom: 0 !important;
+}
+
+.wlw-options-wrap {
+  margin-top: 12px;
+}
+
+.wlw-options-wrap label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+/* ── Leads Table: extra fields ─────────────────────────────────────── */
+
+.wlw-extra-fields {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wlw-extra-fields li {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.wlw-extra-fields .wlw-field-label {
+  font-weight: 600;
+  color: #555;
+}
+
+/* ── Color picker swatch fix ───────────────────────────────────────── */
+
+.wlw-card .wp-picker-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }

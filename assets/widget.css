@@ -18,6 +18,20 @@ body {
   --wlw-muted: #7a8fa6;
   --wlw-input-bg: #1a2636;
   --wlw-radius: 18px;
+  --wlw-font: -apple-system, "Segoe UI", sans-serif;
+  --wlw-header-bg: var(--wlw-bg2);
+  --wlw-header-title: var(--wlw-text);
+  --wlw-header-subtitle: var(--wlw-muted);
+  --wlw-header-icon-bg: var(--wlw-green);
+  --wlw-header-icon-svg: #ffffff;
+  --wlw-close-bg: rgba(255, 255, 255, 0.06);
+  --wlw-close-color: var(--wlw-muted);
+  --wlw-label-color: var(--wlw-text);
+  --wlw-input-color: var(--wlw-text);
+  --wlw-btn-bg: var(--wlw-green);
+  --wlw-btn-color: #fff;
+  --wlw-tooltip-bg: #1a2230;
+  --wlw-tooltip-color: var(--wlw-text);
   --wlw-shadow:
     0 20px 60px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(37, 211, 102, 0.12);
 }
@@ -108,9 +122,9 @@ body {
 
 /* Tooltip */
 .wlw-tooltip {
-  background: #1a2230;
-  color: var(--wlw-text);
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  background: var(--wlw-tooltip-bg);
+  color: var(--wlw-tooltip-color);
+  font-family: var(--wlw-font);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
@@ -183,13 +197,13 @@ body {
   gap: 14px;
   padding: 22px 22px 18px;
   border-bottom: 1px solid var(--wlw-border);
-  background: var(--wlw-bg2);
+  background: var(--wlw-header-bg);
 }
 
 .wlw-header-icon {
   width: 48px;
   height: 48px;
-  background: var(--wlw-green);
+  background: var(--wlw-header-icon-bg);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -200,23 +214,23 @@ body {
 .wlw-header-icon svg {
   width: 26px;
   height: 26px;
-  fill: #fff;
+  fill: var(--wlw-header-icon-svg);
 }
 
 .wlw-header-text h3 {
   margin: 0 0 2px;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--wlw-font);
   font-size: 18px;
   font-weight: 700;
-  color: var(--wlw-text);
+  color: var(--wlw-header-title);
   line-height: 1.2;
 }
 
 .wlw-header-text p {
   margin: 0;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--wlw-font);
   font-size: 13px;
-  color: var(--wlw-muted);
+  color: var(--wlw-header-subtitle);
 }
 
 .wlw-close-btn {
@@ -225,22 +239,24 @@ body {
   right: 14px;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--wlw-close-bg);
   border: 1px solid var(--wlw-border);
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
-  color: var(--wlw-muted);
+  transition:
+    background 0.15s,
+    color 0.15s;
+  color: var(--wlw-close-color);
   font-size: 16px;
   line-height: 1;
 }
 
 .wlw-close-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--wlw-text);
+  filter: brightness(1.6);
+  color: var(--wlw-close-color);
 }
 
 /* Body */
@@ -254,10 +270,10 @@ body {
 
 .wlw-field label {
   display: block;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--wlw-font);
   font-size: 13px;
   font-weight: 600;
-  color: var(--wlw-text);
+  color: var(--wlw-label-color);
   margin-bottom: 7px;
   letter-spacing: 0.01em;
 }
@@ -275,8 +291,8 @@ body {
   border-radius: 10px !important;
   padding: 13px 16px !important;
   font-size: 14px !important;
-  color: var(--wlw-text) !important;
-  font-family: -apple-system, "Segoe UI", sans-serif !important;
+  color: var(--wlw-input-color) !important;
+  font-family: var(--wlw-font) !important;
   outline: none !important;
   transition:
     border-color 0.2s,
@@ -321,7 +337,7 @@ body {
   color: #e05252;
   margin-top: 5px;
   display: none;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--wlw-font);
 }
 
 .wlw-field .wlw-field-error.wlw-visible {
@@ -331,14 +347,14 @@ body {
 /* Submit button */
 .wlw-submit-btn {
   width: 100%;
-  background: var(--wlw-green);
-  color: #fff !important;
+  background: var(--wlw-btn-bg);
+  color: var(--wlw-btn-color) !important;
   border: none !important;
   border-radius: 12px !important;
   padding: 15px 20px !important;
   font-size: 15px !important;
   font-weight: 700 !important;
-  font-family: -apple-system, "Segoe UI", sans-serif !important;
+  font-family: var(--wlw-font) !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
@@ -354,8 +370,8 @@ body {
 }
 
 .wlw-submit-btn:hover {
-  background: var(--wlw-green-dark) !important;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4) !important;
+  filter: brightness(0.88) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
   transform: translateY(-1px) !important;
 }
 
@@ -366,7 +382,7 @@ body {
 .wlw-submit-btn svg {
   width: 20px;
   height: 20px;
-  fill: #fff;
+  fill: var(--wlw-btn-color);
   flex-shrink: 0;
 }
 
@@ -381,7 +397,7 @@ body {
   border: 1px solid rgba(224, 82, 82, 0.3);
   color: #f08080;
   font-size: 13px;
-  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--wlw-font);
   border-radius: 8px;
   padding: 10px 14px;
   margin-bottom: 14px;
