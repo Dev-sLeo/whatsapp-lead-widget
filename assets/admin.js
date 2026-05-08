@@ -258,4 +258,38 @@
 
   // Sync before form submit
   $("form").on("submit", syncJson);
+
+  // ── Tab Navigation ─────────────────────────────────────────────────────────
+
+  var $tabNav = $("#wlw-tab-nav");
+  var $tabLinks = $tabNav.find(".nav-tab");
+  var $tabPanels = $(".wlw-tab-panel");
+  var firstTab = $tabLinks.first().data("tab");
+
+  function activateTab(id) {
+    $tabLinks.removeClass("nav-tab-active");
+    $tabPanels.removeClass("wlw-tab-active");
+    $tabNav.find('[data-tab="' + id + '"]').addClass("nav-tab-active");
+    $("#" + id).addClass("wlw-tab-active");
+    // Persist selection in sessionStorage
+    try {
+      sessionStorage.setItem("wlw_active_tab", id);
+    } catch (e) {}
+  }
+
+  // Restore last active tab or default to first
+  var savedTab = "";
+  try {
+    savedTab = sessionStorage.getItem("wlw_active_tab") || "";
+  } catch (e) {}
+  if (savedTab && $("#" + savedTab).length) {
+    activateTab(savedTab);
+  } else {
+    activateTab(firstTab);
+  }
+
+  $tabLinks.on("click", function (e) {
+    e.preventDefault();
+    activateTab($(this).data("tab"));
+  });
 })(jQuery);

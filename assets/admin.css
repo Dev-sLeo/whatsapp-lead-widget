@@ -198,6 +198,26 @@
   list-style: none;
 }
 
+/* ── Tab Navigation ────────────────────────────────────────────────── */
+
+.wlw-tab-nav {
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.wlw-tab-panel {
+  display: none;
+  padding-top: 20px;
+}
+
+.wlw-tab-panel.wlw-tab-active {
+  display: block;
+}
+
+.wlw-submit-row {
+  margin-top: 8px;
+}
+
 .wlw-extra-fields li {
   font-size: 12px;
   line-height: 1.6;

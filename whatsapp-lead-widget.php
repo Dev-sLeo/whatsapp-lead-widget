@@ -270,243 +270,235 @@ function wlw_settings_page()
         <form method="post" action="">
             <?php wp_nonce_field('wlw_settings_nonce'); ?>
 
-            <div class="wlw-card">
-                <h2>WhatsApp</h2>
-                <table class="form-table">
-                    <tr>
-                        <th>Número do WhatsApp <span class="wlw-required">*</span></th>
-                        <td>
-                            <input type="text" id="wlw-phone-display" inputmode="numeric" autocomplete="tel" class="regular-text" placeholder="+55 (11) 99999-9999" />
-                            <input type="hidden" name="wlw_whatsapp_number" id="wlw-phone-raw" value="<?php echo esc_attr($number); ?>" />
-                            <p class="description">Formato internacional sem espaços ou símbolos. Ex: 5511999999999</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Mensagem padrão no WhatsApp</th>
-                        <td>
-                            <textarea name="wlw_whatsapp_message" rows="3" class="large-text"><?php echo esc_textarea($wa_msg); ?></textarea>
-                            <p class="description">Mensagem que será enviada automaticamente ao abrir o WhatsApp. Você pode usar {nome} para inserir o nome do lead.</p>
-                        </td>
-                    </tr>
-                </table>
+            <nav class="nav-tab-wrapper wlw-tab-nav" id="wlw-tab-nav">
+                <a href="#tab-geral" class="nav-tab" data-tab="tab-geral">Geral</a>
+                <a href="#tab-botao" class="nav-tab" data-tab="tab-botao">Botão &amp; Modal</a>
+                <a href="#tab-aparencia" class="nav-tab" data-tab="tab-aparencia">Aparência</a>
+                <a href="#tab-formulario" class="nav-tab" data-tab="tab-formulario">Formulário</a>
+                <a href="#tab-antispam" class="nav-tab" data-tab="tab-antispam">Anti-Spam</a>
+            </nav>
+
+            <!-- ═══ Tab: Geral ═══ -->
+            <div id="tab-geral" class="wlw-tab-panel">
+                <div class="wlw-card">
+                    <h2>WhatsApp</h2>
+                    <table class="form-table">
+                        <tr>
+                            <th>Número do WhatsApp <span class="wlw-required">*</span></th>
+                            <td>
+                                <input type="text" id="wlw-phone-display" inputmode="numeric" autocomplete="tel" class="regular-text" placeholder="+55 (11) 99999-9999" />
+                                <input type="hidden" name="wlw_whatsapp_number" id="wlw-phone-raw" value="<?php echo esc_attr($number); ?>" />
+                                <p class="description">Formato internacional sem espaços ou símbolos. Ex: 5511999999999</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mensagem padrão no WhatsApp</th>
+                            <td>
+                                <textarea name="wlw_whatsapp_message" rows="3" class="large-text"><?php echo esc_textarea($wa_msg); ?></textarea>
+                                <p class="description">Mensagem enviada automaticamente ao abrir o WhatsApp. Use {nome} para inserir o nome do lead.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="wlw-card">
+                    <h2>Notificações</h2>
+                    <table class="form-table">
+                        <tr>
+                            <th>E-mail para receber leads <span class="wlw-required">*</span></th>
+                            <td>
+                                <input type="email" name="wlw_notification_email" value="<?php echo esc_attr($email); ?>" class="regular-text" />
+                                <p class="description">Cada novo lead será enviado para este e-mail.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <div class="wlw-card">
-                <h2>Notificações</h2>
-                <table class="form-table">
-                    <tr>
-                        <th>E-mail para receber leads <span class="wlw-required">*</span></th>
-                        <td>
-                            <input type="email" name="wlw_notification_email" value="<?php echo esc_attr($email); ?>" class="regular-text" />
-                            <p class="description">Cada novo lead será enviado para este e-mail.</p>
-                        </td>
-                    </tr>
-                </table>
+            <!-- ═══ Tab: Botão & Modal ═══ -->
+            <div id="tab-botao" class="wlw-tab-panel">
+                <div class="wlw-card">
+                    <h2>Botão &amp; Modal</h2>
+                    <table class="form-table">
+                        <tr>
+                            <th>Modo do widget</th>
+                            <td>
+                                <label style="display:block;margin-bottom:8px">
+                                    <input type="radio" name="wlw_widget_mode" value="form" <?php checked($widget_mode, 'form'); ?> />
+                                    Com formulário de captura de leads (exibe tooltip e formulário)
+                                </label>
+                                <label style="display:block">
+                                    <input type="radio" name="wlw_widget_mode" value="icon_only" <?php checked($widget_mode, 'icon_only'); ?> />
+                                    Somente ícone (link direto para o WhatsApp, sem tooltip e sem formulário)
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Posição do botão</th>
+                            <td>
+                                <select name="wlw_button_position">
+                                    <option value="right" <?php selected($position, 'right'); ?>>Direita</option>
+                                    <option value="left" <?php selected($position, 'left'); ?>>Esquerda</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Texto do tooltip</th>
+                            <td><input type="text" name="wlw_button_message" value="<?php echo esc_attr($btn_msg); ?>" class="regular-text" /></td>
+                        </tr>
+                        <tr>
+                            <th>Título do modal</th>
+                            <td><input type="text" name="wlw_modal_title" value="<?php echo esc_attr($modal_title); ?>" class="regular-text" /></td>
+                        </tr>
+                        <tr>
+                            <th>Subtítulo do modal</th>
+                            <td><input type="text" name="wlw_modal_subtitle" value="<?php echo esc_attr($modal_sub); ?>" class="regular-text" /></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <div class="wlw-card">
-                <h2>Aparência do Botão e Modal</h2>
-                <table class="form-table">
-                    <tr>
-                        <th>Modo do widget</th>
-                        <td>
-                            <label style="display:block;margin-bottom:8px">
-                                <input type="radio" name="wlw_widget_mode" value="form" <?php checked($widget_mode, 'form'); ?> />
-                                Com formulário de captura de leads (exibe tooltip e formulário)
-                            </label>
-                            <label style="display:block">
-                                <input type="radio" name="wlw_widget_mode" value="icon_only" <?php checked($widget_mode, 'icon_only'); ?> />
-                                Somente ícone (link direto para o WhatsApp, sem tooltip e sem formulário)
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Posição do botão</th>
-                        <td>
-                            <select name="wlw_button_position">
-                                <option value="right" <?php selected($position, 'right'); ?>>Direita</option>
-                                <option value="left" <?php selected($position, 'left'); ?>>Esquerda</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Texto do tooltip do botão</th>
-                        <td><input type="text" name="wlw_button_message" value="<?php echo esc_attr($btn_msg); ?>" class="regular-text" /></td>
-                    </tr>
-                    <tr>
-                        <th>Título do modal</th>
-                        <td><input type="text" name="wlw_modal_title" value="<?php echo esc_attr($modal_title); ?>" class="regular-text" /></td>
-                    </tr>
-                    <tr>
-                        <th>Subtítulo do modal</th>
-                        <td><input type="text" name="wlw_modal_subtitle" value="<?php echo esc_attr($modal_sub); ?>" class="regular-text" /></td>
-                    </tr>
-                    <tr>
-                        <th>Exibir campo "Empresa"</th>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="wlw_show_company_field" value="1" <?php checked($show_company, '1'); ?> />
-                                Mostrar campo opcional de empresa no formulário
-                            </label>
-                        </td>
-                    </tr>
-                </table>
+            <!-- ═══ Tab: Aparência ═══ -->
+            <div id="tab-aparencia" class="wlw-tab-panel">
+                <div class="wlw-card">
+                    <h2>Header</h2>
+                    <p class="description" style="margin-bottom:16px">Cores da faixa superior do modal.</p>
+                    <table class="form-table">
+                        <tr>
+                            <th>Background do header</th>
+                            <td><input type="text" name="wlw_header_color" value="<?php echo esc_attr($header_color); ?>" class="wlw-color-picker" data-default-color="#1e2a3b" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor do título</th>
+                            <td><input type="text" name="wlw_header_title_color" value="<?php echo esc_attr($header_title_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor da descrição</th>
+                            <td><input type="text" name="wlw_header_subtitle_color" value="<?php echo esc_attr($header_subtitle_color); ?>" class="wlw-color-picker" data-default-color="#7a8fa6" /></td>
+                        </tr>
+                        <tr>
+                            <th>Background do ícone</th>
+                            <td><input type="text" name="wlw_header_icon_color" value="<?php echo esc_attr($header_icon_color); ?>" class="wlw-color-picker" data-default-color="#25d366" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor do SVG do ícone</th>
+                            <td>
+                                <input type="text" name="wlw_header_icon_svg_color" value="<?php echo esc_attr($header_icon_svg_color); ?>" class="wlw-color-picker" data-default-color="#ffffff" />
+                                <p class="description">Cor do símbolo dentro do círculo. Padrão: branco.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Background do botão fechar</th>
+                            <td>
+                                <input type="text" name="wlw_close_bg" value="<?php echo esc_attr($close_bg); ?>" class="wlw-color-picker" data-default-color="#243044" />
+                                <p class="description">Deixe em branco para usar o padrão translúcido.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cor da fonte do botão fechar</th>
+                            <td>
+                                <input type="text" name="wlw_close_color" value="<?php echo esc_attr($close_color); ?>" class="wlw-color-picker" data-default-color="#7a8fa6" />
+                                <p class="description">Deixe em branco para usar o padrão.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Background do tooltip</th>
+                            <td>
+                                <input type="text" name="wlw_tooltip_bg" value="<?php echo esc_attr($tooltip_bg); ?>" class="wlw-color-picker" data-default-color="#1a2230" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cor do texto do tooltip</th>
+                            <td>
+                                <input type="text" name="wlw_tooltip_color" value="<?php echo esc_attr($tooltip_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="wlw-card">
+                    <h2>Formulário &amp; Botão de Envio</h2>
+                    <p class="description" style="margin-bottom:16px">Cores dos campos, botão e tipografia.</p>
+                    <table class="form-table">
+                        <tr>
+                            <th>Background do modal</th>
+                            <td><input type="text" name="wlw_bg_color" value="<?php echo esc_attr($bg_color); ?>" class="wlw-color-picker" data-default-color="#1a2230" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor das labels</th>
+                            <td><input type="text" name="wlw_label_color" value="<?php echo esc_attr($label_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor da fonte dos inputs</th>
+                            <td><input type="text" name="wlw_input_color" value="<?php echo esc_attr($input_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" /></td>
+                        </tr>
+                        <tr>
+                            <th>Background dos inputs</th>
+                            <td><input type="text" name="wlw_input_bg" value="<?php echo esc_attr($input_bg); ?>" class="wlw-color-picker" data-default-color="#1a2636" /></td>
+                        </tr>
+                        <tr>
+                            <th>Background do botão</th>
+                            <td><input type="text" name="wlw_btn_bg" value="<?php echo esc_attr($btn_bg); ?>" class="wlw-color-picker" data-default-color="#25d366" /></td>
+                        </tr>
+                        <tr>
+                            <th>Cor da fonte + ícone do botão</th>
+                            <td><input type="text" name="wlw_btn_color" value="<?php echo esc_attr($btn_color); ?>" class="wlw-color-picker" data-default-color="#ffffff" /></td>
+                        </tr>
+                        <tr>
+                            <th>Usar fonte do site</th>
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="wlw_use_site_font" value="1" <?php checked($use_site_font, '1'); ?> id="wlw-use-site-font" />
+                                    Herdar a fonte do tema instalado
+                                </label>
+                            </td>
+                        </tr>
+                        <tr id="wlw-custom-font-row" <?php echo $use_site_font === '1' ? 'style="display:none"' : ''; ?>>
+                            <th>Fonte personalizada</th>
+                            <td>
+                                <input type="text" name="wlw_font_family" value="<?php echo esc_attr($font_family); ?>" class="regular-text" placeholder="Ex: Roboto, Inter, Lato" />
+                                <p class="description">Nome da fonte (Google Fonts ou sistema). Deixe em branco para usar a padrão do widget.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <div class="wlw-card">
-                <h2>Anti-Spam</h2>
-                <p class="description" style="margin-bottom:12px">O campo honeypot já está ativo por padrão. Para proteção extra, configure o reCAPTCHA v3 do Google.</p>
-                <table class="form-table">
-                    <tr>
-                        <th>reCAPTCHA v3 — Chave do site</th>
-                        <td>
-                            <input type="text" name="wlw_recaptcha_site_key" value="<?php echo esc_attr($rc_site_key); ?>" class="regular-text" placeholder="6Le..." />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>reCAPTCHA v3 — Chave secreta</th>
-                        <td>
-                            <input type="text" name="wlw_recaptcha_secret_key" value="<?php echo esc_attr($rc_secret_key); ?>" class="regular-text" placeholder="6Le..." />
-                            <p class="description">Obtenha as chaves em <a href="https://www.google.com/recaptcha/admin" target="_blank">google.com/recaptcha</a>. Escolha reCAPTCHA v3.</p>
-                        </td>
-                    </tr>
-                </table>
+            <!-- ═══ Tab: Formulário ═══ -->
+            <div id="tab-formulario" class="wlw-tab-panel">
+                <div class="wlw-card">
+                    <h2>Campos do Formulário</h2>
+                    <p class="description" style="margin-bottom:16px">Configure quais campos aparecem no formulário. Arraste para reordenar. Os campos <strong>Nome</strong> e <strong>E-mail</strong> são obrigatórios e não podem ser removidos.</p>
+                    <input type="hidden" id="wlw-fields-json" name="wlw_form_fields_json" value="<?php echo esc_attr(get_option('wlw_form_fields', wlw_default_fields_json())); ?>" />
+                    <div id="wlw-fields-list"></div>
+                    <button type="button" id="wlw-add-field" class="button button-secondary" style="margin-top:12px">+ Adicionar campo</button>
+                </div>
             </div>
 
-            <div class="wlw-card">
-                <h2>Estilização — Header</h2>
-                <p class="description" style="margin-bottom:16px">Personalize as cores da faixa superior do modal.</p>
-                <table class="form-table">
-                    <tr>
-                        <th>Background do header</th>
-                        <td>
-                            <input type="text" name="wlw_header_color" value="<?php echo esc_attr($header_color); ?>" class="wlw-color-picker" data-default-color="#1e2a3b" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor do título</th>
-                        <td>
-                            <input type="text" name="wlw_header_title_color" value="<?php echo esc_attr($header_title_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor da descrição</th>
-                        <td>
-                            <input type="text" name="wlw_header_subtitle_color" value="<?php echo esc_attr($header_subtitle_color); ?>" class="wlw-color-picker" data-default-color="#7a8fa6" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Background do ícone</th>
-                        <td>
-                            <input type="text" name="wlw_header_icon_color" value="<?php echo esc_attr($header_icon_color); ?>" class="wlw-color-picker" data-default-color="#25d366" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor do SVG do ícone</th>
-                        <td>
-                            <input type="text" name="wlw_header_icon_svg_color" value="<?php echo esc_attr($header_icon_svg_color); ?>" class="wlw-color-picker" data-default-color="#ffffff" />
-                            <p class="description">Cor do símbolo dentro do círculo do ícone. Padrão: branco.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Background do botão fechar</th>
-                        <td>
-                            <input type="text" name="wlw_close_bg" value="<?php echo esc_attr($close_bg); ?>" class="wlw-color-picker" data-default-color="#243044" />
-                            <p class="description">Cor de fundo do círculo do botão ✕. Deixe em branco para usar o padrão translúcido.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor da fonte do botão fechar</th>
-                        <td>
-                            <input type="text" name="wlw_close_color" value="<?php echo esc_attr($close_color); ?>" class="wlw-color-picker" data-default-color="#7a8fa6" />
-                            <p class="description">Cor do símbolo ✕. Deixe em branco para usar o padrão.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Background do tooltip</th>
-                        <td>
-                            <input type="text" name="wlw_tooltip_bg" value="<?php echo esc_attr($tooltip_bg); ?>" class="wlw-color-picker" data-default-color="#1a2230" />
-                            <p class="description">Cor de fundo da caixinha com o texto do botão flutuante.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor do texto do tooltip</th>
-                        <td>
-                            <input type="text" name="wlw_tooltip_color" value="<?php echo esc_attr($tooltip_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" />
-                            <p class="description">Cor do texto exibido no tooltip.</p>
-                        </td>
-                    </tr>
-                </table>
+            <!-- ═══ Tab: Anti-Spam ═══ -->
+            <div id="tab-antispam" class="wlw-tab-panel">
+                <div class="wlw-card">
+                    <h2>Anti-Spam</h2>
+                    <p class="description" style="margin-bottom:12px">O campo honeypot já está ativo por padrão. Para proteção extra, configure o reCAPTCHA v3 do Google.</p>
+                    <table class="form-table">
+                        <tr>
+                            <th>reCAPTCHA v3 — Chave do site</th>
+                            <td>
+                                <input type="text" name="wlw_recaptcha_site_key" value="<?php echo esc_attr($rc_site_key); ?>" class="regular-text" placeholder="6Le..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>reCAPTCHA v3 — Chave secreta</th>
+                            <td>
+                                <input type="text" name="wlw_recaptcha_secret_key" value="<?php echo esc_attr($rc_secret_key); ?>" class="regular-text" placeholder="6Le..." />
+                                <p class="description">Obtenha as chaves em <a href="https://www.google.com/recaptcha/admin" target="_blank">google.com/recaptcha</a>. Escolha reCAPTCHA v3.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <div class="wlw-card">
-                <h2>Estilização — Formulário</h2>
-                <p class="description" style="margin-bottom:16px">Personalize as cores dos campos e do botão de envio.</p>
-                <table class="form-table">
-                    <tr>
-                        <th>Background do modal</th>
-                        <td>
-                            <input type="text" name="wlw_bg_color" value="<?php echo esc_attr($bg_color); ?>" class="wlw-color-picker" data-default-color="#1a2230" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor das labels</th>
-                        <td>
-                            <input type="text" name="wlw_label_color" value="<?php echo esc_attr($label_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor da fonte dos inputs</th>
-                        <td>
-                            <input type="text" name="wlw_input_color" value="<?php echo esc_attr($input_color); ?>" class="wlw-color-picker" data-default-color="#e8edf5" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Background dos inputs</th>
-                        <td>
-                            <input type="text" name="wlw_input_bg" value="<?php echo esc_attr($input_bg); ?>" class="wlw-color-picker" data-default-color="#1a2636" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Background do botão</th>
-                        <td>
-                            <input type="text" name="wlw_btn_bg" value="<?php echo esc_attr($btn_bg); ?>" class="wlw-color-picker" data-default-color="#25d366" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Cor da fonte + ícone do botão</th>
-                        <td>
-                            <input type="text" name="wlw_btn_color" value="<?php echo esc_attr($btn_color); ?>" class="wlw-color-picker" data-default-color="#ffffff" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Usar fonte do site</th>
-                        <td>
-                            <label>
-                                <input type="checkbox" name="wlw_use_site_font" value="1" <?php checked($use_site_font, '1'); ?> id="wlw-use-site-font" />
-                                Herdar a fonte do tema instalado
-                            </label>
-                        </td>
-                    </tr>
-                    <tr id="wlw-custom-font-row" <?php echo $use_site_font === '1' ? 'style="display:none"' : ''; ?>>
-                        <th>Fonte personalizada</th>
-                        <td>
-                            <input type="text" name="wlw_font_family" value="<?php echo esc_attr($font_family); ?>" class="regular-text" placeholder="Ex: Roboto, Inter, Lato" />
-                            <p class="description">Nome da fonte (Google Fonts ou fonte do sistema). Deixe em branco para usar a padrão do widget.</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="wlw-card">
-                <h2>Campos do Formulário</h2>
-                <p class="description" style="margin-bottom:16px">Configure quais campos aparecem no formulário. Arraste para reordenar. Os campos <strong>Nome</strong> e <strong>E-mail</strong> são obrigatórios e não podem ser removidos.</p>
-                <input type="hidden" id="wlw-fields-json" name="wlw_form_fields_json" value="<?php echo esc_attr(get_option('wlw_form_fields', wlw_default_fields_json())); ?>" />
-                <div id="wlw-fields-list"></div>
-                <button type="button" id="wlw-add-field" class="button button-secondary" style="margin-top:12px">+ Adicionar campo</button>
-            </div>
-
-            <p><input type="submit" name="wlw_save_settings" class="button button-primary button-large" value="Salvar Configurações" /></p>
+            <p class="wlw-submit-row"><input type="submit" name="wlw_save_settings" class="button button-primary button-large" value="Salvar Configurações" /></p>
         </form>
     </div>
 <?php
