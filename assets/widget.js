@@ -70,6 +70,28 @@
 
   function buildWidget() {
     var pos = cfg.position === "left" ? "wlw-left" : "wlw-right";
+    var root = document.getElementById("wlw-root");
+    if (!root) return;
+
+    // ── Icon-only mode: direct WhatsApp link, no tooltip, no form ──────────
+    if (cfg.mode === "icon_only") {
+      var number = (cfg.waNumber || "").replace(/\D/g, "");
+      var waUrl = "https://wa.me/" + number;
+      if (cfg.waMessage) waUrl += "?text=" + encodeURIComponent(cfg.waMessage);
+      root.innerHTML =
+        '<a id="wlw-float-btn" class="' +
+        pos +
+        '" href="' +
+        escHtml(waUrl) +
+        '" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp">' +
+        '<div class="wlw-fab">' +
+        WA_ICON +
+        "</div>" +
+        "</a>";
+      return;
+    }
+
+    // ── Form mode: tooltip + popover with lead capture form ────────────────
     var fields = cfg.fields || [];
 
     var fieldsHtml = "";
@@ -118,8 +140,7 @@
       "</div>",
     ].join("");
 
-    var root = document.getElementById("wlw-root");
-    if (root) root.innerHTML = html;
+    root.innerHTML = html;
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
@@ -283,6 +304,9 @@
 
   function init() {
     buildWidget();
+
+    // In icon-only mode the <a> tag handles navigation natively; nothing to wire.
+    if (cfg.mode === "icon_only") return;
 
     var floatBtn = $("wlw-float-btn");
     if (!floatBtn) return;

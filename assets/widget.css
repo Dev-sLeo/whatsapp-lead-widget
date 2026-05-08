@@ -164,7 +164,6 @@ body {
   border-radius: var(--wlw-radius);
   box-shadow: var(--wlw-shadow);
   width: 340px;
-  border: 1px solid var(--wlw-border);
   overflow: hidden;
   opacity: 0;
   pointer-events: none;

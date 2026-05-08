@@ -34,6 +34,7 @@ function wlw_activate()
     add_option('wlw_whatsapp_message', 'Olá! Vim pelo site e gostaria de mais informações.');
     add_option('wlw_show_company_field', '1');
     add_option('wlw_button_position', 'right');
+    add_option('wlw_widget_mode', 'form');
     add_option('wlw_recaptcha_site_key', '');
     add_option('wlw_recaptcha_secret_key', '');
     // Style options
@@ -169,6 +170,10 @@ function wlw_settings_page()
             'wlw_recaptcha_secret_key',
             'wlw_font_family',
         ];
+        // Widget mode
+        $allowed_modes = ['form', 'icon_only'];
+        $submitted_mode = sanitize_text_field($_POST['wlw_widget_mode'] ?? 'form');
+        update_option('wlw_widget_mode', in_array($submitted_mode, $allowed_modes, true) ? $submitted_mode : 'form');
         foreach ($text_fields as $field) {
             if (isset($_POST[$field])) {
                 update_option($field, sanitize_text_field($_POST[$field]));
@@ -236,6 +241,7 @@ function wlw_settings_page()
     $wa_msg        = get_option('wlw_whatsapp_message', 'Olá! Vim pelo site e gostaria de mais informações.');
     $show_company   = get_option('wlw_show_company_field', '1');
     $position       = get_option('wlw_button_position', 'right');
+    $widget_mode    = get_option('wlw_widget_mode', 'form');
     $rc_site_key    = get_option('wlw_recaptcha_site_key', '');
     $rc_secret_key  = get_option('wlw_recaptcha_secret_key', '');
     // Style options — Header
@@ -270,7 +276,8 @@ function wlw_settings_page()
                     <tr>
                         <th>Número do WhatsApp <span class="wlw-required">*</span></th>
                         <td>
-                            <input type="text" name="wlw_whatsapp_number" value="<?php echo esc_attr($number); ?>" class="regular-text" placeholder="5511999999999" />
+                            <input type="text" id="wlw-phone-display" inputmode="numeric" autocomplete="tel" class="regular-text" placeholder="+55 (11) 99999-9999" />
+                            <input type="hidden" name="wlw_whatsapp_number" id="wlw-phone-raw" value="<?php echo esc_attr($number); ?>" />
                             <p class="description">Formato internacional sem espaços ou símbolos. Ex: 5511999999999</p>
                         </td>
                     </tr>
@@ -300,6 +307,19 @@ function wlw_settings_page()
             <div class="wlw-card">
                 <h2>Aparência do Botão e Modal</h2>
                 <table class="form-table">
+                    <tr>
+                        <th>Modo do widget</th>
+                        <td>
+                            <label style="display:block;margin-bottom:8px">
+                                <input type="radio" name="wlw_widget_mode" value="form" <?php checked($widget_mode, 'form'); ?> />
+                                Com formulário de captura de leads (exibe tooltip e formulário)
+                            </label>
+                            <label style="display:block">
+                                <input type="radio" name="wlw_widget_mode" value="icon_only" <?php checked($widget_mode, 'icon_only'); ?> />
+                                Somente ícone (link direto para o WhatsApp, sem tooltip e sem formulário)
+                            </label>
+                        </td>
+                    </tr>
                     <tr>
                         <th>Posição do botão</th>
                         <td>
@@ -849,6 +869,9 @@ function wlw_frontend_assets()
         'position'         => get_option('wlw_button_position', 'right'),
         'recaptchaSiteKey' => $rc_site_key,
         'fields'           => $frontend_fields,
+        'mode'             => get_option('wlw_widget_mode', 'form'),
+        'waNumber'         => preg_replace('/\D/', '', get_option('wlw_whatsapp_number', '')),
+        'waMessage'        => get_option('wlw_whatsapp_message', 'Olá! Vim pelo site e gostaria de mais informações.'),
     ]);
 }
 

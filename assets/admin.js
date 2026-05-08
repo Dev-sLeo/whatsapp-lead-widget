@@ -2,6 +2,62 @@
 (function ($) {
   "use strict";
 
+  // ── Phone mask ─────────────────────────────────────────────────────────────
+
+  var $phoneDisplay = $("#wlw-phone-display");
+  var $phoneRaw = $("#wlw-phone-raw");
+
+  function formatPhone(digits) {
+    // Brazilian mobile only: 55 (DD) NNNNN-NNNN — 13 digits max
+    var d = digits.replace(/\D/g, "").slice(0, 13);
+    if (!d) return "";
+    if (d.length <= 2) return "+" + d;
+    if (d.length <= 4) return "+" + d.slice(0, 2) + " (" + d.slice(2);
+    if (d.length <= 6)
+      return "+" + d.slice(0, 2) + " (" + d.slice(2, 4) + ") " + d.slice(4);
+    if (d.length <= 11)
+      return "+" + d.slice(0, 2) + " (" + d.slice(2, 4) + ") " + d.slice(4);
+    // 13 digits: +55 (DD) NNNNN-NNNN
+    return (
+      "+" +
+      d.slice(0, 2) +
+      " (" +
+      d.slice(2, 4) +
+      ") " +
+      d.slice(4, 9) +
+      "-" +
+      d.slice(9)
+    );
+  }
+
+  // Initialise display from stored raw value
+  if ($phoneDisplay.length) {
+    $phoneDisplay.val(formatPhone($phoneRaw.val()));
+
+    $phoneDisplay.on("input", function () {
+      var raw = this.value.replace(/\D/g, "").slice(0, 13);
+      $phoneRaw.val(raw);
+      var formatted = formatPhone(raw);
+      // Only reformat when the cursor is at the end to avoid caret jumps mid-edit
+      var atEnd = this.selectionStart >= this.value.length;
+      if (atEnd) this.value = formatted;
+    });
+
+    $phoneDisplay.on("keydown", function (e) {
+      // Allow: backspace, delete, tab, escape, arrows
+      if ([8, 46, 9, 27, 37, 38, 39, 40].indexOf(e.keyCode) !== -1) return;
+      // Block non-numeric keys (allow Ctrl/Cmd combos)
+      if (!e.ctrlKey && !e.metaKey && !/^\d$/.test(e.key)) {
+        e.preventDefault();
+      }
+    });
+
+    $phoneDisplay.closest("form").on("submit", function () {
+      // Ensure hidden raw field is up to date
+      $phoneRaw.val($phoneDisplay.val().replace(/\D/g, ""));
+    });
+  }
+
   // ── Color Pickers ──────────────────────────────────────────────────────────
 
   $(".wlw-color-picker").wpColorPicker();
