@@ -170,6 +170,24 @@
 
   function closeModal() {
     $("wlw-modal").classList.remove("wlw-open");
+    $("wlw-float-btn").classList.remove("wlw-active");
+  }
+
+  function toggleModal() {
+    var modal = $("wlw-modal");
+    if (modal.classList.contains("wlw-open")) {
+      closeModal();
+    } else {
+      modal.classList.add("wlw-open");
+      $("wlw-float-btn").classList.add("wlw-active");
+      setTimeout(function () {
+        var fields = cfg.fields || [];
+        if (fields.length) {
+          var first = $("wlw-" + fields[0].id);
+          if (first) first.focus();
+        }
+      }, 200);
+    }
   }
 
   function showError(id, show) {
@@ -314,9 +332,9 @@
     var closeBtn = $("wlw-close");
     var submitBtn = $("wlw-submit");
 
-    floatBtn.addEventListener("click", openModal);
+    floatBtn.addEventListener("click", toggleModal);
     floatBtn.addEventListener("keydown", function (e) {
-      if (e.key === "Enter" || e.key === " ") openModal();
+      if (e.key === "Enter" || e.key === " ") toggleModal();
     });
 
     closeBtn.addEventListener("click", closeModal);
