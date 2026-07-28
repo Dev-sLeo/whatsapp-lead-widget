@@ -4,7 +4,7 @@
  * Plugin Name: WhatsApp Lead Widget
  * Plugin URI:  https://github.com/seu-usuario/whatsapp-lead-widget
  * Description: Botão flutuante do WhatsApp com formulário de captura de leads. Envia leads por e-mail e salva no painel administrativo.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Leonardo Pang
  * License:     GPL-2.0+
  * Text Domain: whatsapp-lead-widget
@@ -673,12 +673,33 @@ function wlw_submit_lead()
         }
     }
 
-    $name          = sanitize_text_field($_POST['full_name'] ?? '');
-    $email         = sanitize_email($_POST['email'] ?? '');
-    $clinic        = sanitize_text_field($_POST['clinic'] ?? '');
-    $collaborators = sanitize_text_field($_POST['collaborators'] ?? '');
+    $fields = json_decode(get_option('wlw_form_fields', wlw_default_fields_json()), true);
+    if (! is_array($fields)) $fields = [];
 
-    if (empty($name) || empty($email) || empty($clinic) || empty($collaborators)) {
+    $name  = '';
+    $email = '';
+    $extra_data = [];
+
+    foreach ($fields as $field) {
+        if (isset($field['enabled']) && ! $field['enabled']) continue;
+
+        $id  = $field['id'];
+        $val = sanitize_text_field($_POST[$id] ?? '');
+
+        if (! empty($field['required']) && $val === '') {
+            wp_send_json_error(['message' => 'Por favor, preencha todos os campos obrigatórios.']);
+        }
+
+        if ($id === 'full_name') {
+            $name = $val;
+        } elseif ($id === 'email') {
+            $email = sanitize_email($_POST[$id] ?? '');
+        } else {
+            $extra_data[] = ['label' => $field['label'], 'value' => $val];
+        }
+    }
+
+    if (empty($name) || empty($email)) {
         wp_send_json_error(['message' => 'Por favor, preencha todos os campos obrigatórios.']);
     }
     if (! is_email($email)) {
@@ -690,19 +711,20 @@ function wlw_submit_lead()
     $wpdb->insert(
         $wpdb->prefix . 'wlw_leads',
         [
-            'full_name'  => $name,
-            'email'      => $email,
-            'phone'      => $collaborators,
-            'company'    => $clinic,
-            'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
+            'full_name'    => $name,
+            'email'        => $email,
+            'phone'        => '',
+            'company'      => '',
+            'extra_fields' => wp_json_encode($extra_data),
+            'ip_address'   => $_SERVER['REMOTE_ADDR'] ?? '',
         ],
-        ['%s', '%s', '%s', '%s', '%s']
+        ['%s', '%s', '%s', '%s', '%s', '%s']
     );
 
     // Send email notification
     $to      = get_option('wlw_notification_email', get_option('admin_email'));
     $subject = 'Novo Lead WhatsApp: ' . $name;
-    $body    = wlw_build_email($name, $email, $clinic, $collaborators);
+    $body    = wlw_build_email($name, $email, $extra_data);
     $headers = ['Content-Type: text/html; charset=UTF-8'];
     wp_mail($to, $subject, $body, $headers);
 
